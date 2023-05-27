@@ -12,23 +12,21 @@ export default function AuthProvider({ children }) {
 
   async function fetch() {
     try {
-      if (userSelector.id) {
-        const token = JSON.parse(localStorage.getItem("user"));
-        console.log(token);
-        const user = await api
-          .get("/users/v3", {
-            params: {
-              token,
-              id: userSelector.id,
-            },
-          })
-          .then((res) => res.data);
-        if (user?.handphone) {
-          dispatch({
-            type: "login",
-            payload: user,
-          });
-        }
+      const token = JSON.parse(localStorage.getItem("user"));
+      console.log(token);
+      const user = await api
+        .get("/users/v3", {
+          params: {
+            token,
+            id: userSelector.id,
+          },
+        })
+        .then((res) => res.data);
+      if (user?.handphone) {
+        dispatch({
+          type: "login",
+          payload: user,
+        });
       }
 
       // console.log(user.data);

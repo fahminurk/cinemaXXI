@@ -14,13 +14,13 @@ const store = configureStore({ reducer: rootReducer, middleware: [thunk] });
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
-    <AuthProvider>
-      <ChakraProvider>
-        <BrowserRouter>
+    <ChakraProvider>
+      <BrowserRouter>
+        <AuthProvider>
           <App />
-        </BrowserRouter>
-      </ChakraProvider>
-    </AuthProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </ChakraProvider>
   </Provider>
 );
 

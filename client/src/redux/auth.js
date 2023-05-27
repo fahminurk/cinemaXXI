@@ -1,5 +1,6 @@
 const init = {
   handphone: "",
+  password: "",
 };
 
 function userReducer(state = init, action) {
@@ -13,6 +14,7 @@ function userReducer(state = init, action) {
       address: action.payload.address,
       avatar_url: action.payload.avatar_url,
       handphone: action.payload.handphone,
+      // token: action.payload.token,
     };
   } else if (action.type == "logout") {
     return init;

@@ -33,7 +33,6 @@ import { api } from "../api/api";
 import { useEffect, useRef, useState } from "react";
 
 export default function Profile() {
-  const nav = useNavigate();
   const userSelector = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [SelectFile, setSelectFile] = useState(null);

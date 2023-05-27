@@ -12,8 +12,9 @@ export default function ProtectedPage({
   const userSelector = useSelector((state) => state.auth);
   const nav = useNavigate();
 
-  console.log(userSelector.handphone);
-  console.log(needLogin);
+  // console.log(userSelector.handphone);
+  console.log("needlogin: " + needLogin);
+  console.log("guestOnly: " + guestOnly);
 
   useEffect(() => {
     if (guestOnly && userSelector?.handphone) {

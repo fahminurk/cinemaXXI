@@ -6,10 +6,9 @@ import {
   InputGroup,
   Stack,
   InputLeftAddon,
-  InputRightAddon,
-  InputLeftElement,
   Button,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import { FaLock, FaPhone } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,6 +19,7 @@ import { useDispatch } from "react-redux";
 export default function Login() {
   const nav = useNavigate();
   const dispatch = useDispatch();
+  const toast = useToast();
   const [user, setUser] = useState({
     handphone: "",
     password: "",
@@ -38,8 +38,14 @@ export default function Login() {
   const login = async () => {
     let token;
 
-    if (!user.handphone && !user.password) {
-      alert("isi semua");
+    if (!user.handphone || !user.password) {
+      toast({
+        title: "fill in all data.",
+        status: "warning",
+        position: "top",
+        duration: 1000,
+        isClosable: true,
+      });
     } else {
       await api
         .post("/users/login", user)
@@ -47,7 +53,16 @@ export default function Login() {
           localStorage.setItem("user", JSON.stringify(res.data.token));
           token = res.data.token;
         })
-        .catch((err) => alert("emai/password salah"));
+        .catch((err) =>
+          toast({
+            title: "Incorrect password/email",
+            status: "error",
+            position: "top",
+            duration: 1000,
+            isClosable: true,
+          })
+        );
+
       await api
         .get("/users/v3", {
           params: {
@@ -59,9 +74,17 @@ export default function Login() {
             type: "login",
             payload: res.data,
           });
+          toast({
+            title: "success login",
+            status: "success",
+            position: "top",
+            duration: 1000,
+            isClosable: true,
+          });
           nav("/home");
-        });
-      return;
+        })
+        .catch((err) => console.log(err.message));
+      // return;
     }
   };
 
@@ -113,6 +136,13 @@ export default function Login() {
               w="100vw"
               maxW="355px"
               id="password"
+              // onChange={(e) => {
+              //   if (isNaN(e.target.value)) {
+              //     e.target.value = "";
+              //   } else {
+              //     inputHandler();
+              //   }
+              // }}
               onChange={inputHandler}
             />
           </InputGroup>
@@ -142,14 +172,15 @@ export default function Login() {
             >
               Login
             </Button>
-
-            <Flex
-              justifyContent={"end"}
-              flexDir={"column"}
-              textDecor={"underline"}
-            >
-              Forgot/Password
-            </Flex>
+            <Link to={"/forgot-password"}>
+              <Flex
+                justifyContent={"end"}
+                flexDir={"column"}
+                textDecor={"underline"}
+              >
+                Forgot/Password
+              </Flex>
+            </Link>
           </Flex>
 
           <Box paddingY={"10px"} fontSize="13.6px">
