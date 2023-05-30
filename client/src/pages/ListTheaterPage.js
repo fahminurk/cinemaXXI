@@ -1,27 +1,21 @@
 import { Box, Input } from "@chakra-ui/react";
-import Navbar from "../components/Navbar";
-import Carousel from "../components/Carousel";
-import MovieList from "../components/MovieList";
-import Footer from "../components/Footer";
 import { useEffect, useState } from "react";
 import { api } from "../api/api";
 
-export default function CityPage() {
-  const [cities, setCities] = useState([]);
+export default function TheaterPage() {
+  const [theaters, setTheaters] = useState([]);
+
   useEffect(() => {
-    fetchCity();
+    fetchTheater();
   }, []);
 
-  async function fetchCity() {
-    try {
-      await api.get("/cities").then((res) => {
-        console.log(res.data);
-        setCities(res.data);
-      });
-    } catch (err) {
-      console.log(err.message);
-    }
+  async function fetchTheater() {
+    await api.get("/theaters").then((res) => {
+      console.log(res.data);
+      setTheaters(res.data);
+    });
   }
+
   return (
     <>
       <Box paddingBottom={"80px"}>
@@ -43,15 +37,14 @@ export default function CityPage() {
         ></Input>
 
         <Box>
-          {cities?.map((city, idx) => (
+          {theaters?.map((val, idx) => (
             <Box
-              key={city + "_" + idx}
               w="100%"
               padding="10px 15px"
               border="1px solid #EBEBEB"
               color={"black"}
             >
-              {city.city}
+              {val.name}
             </Box>
           ))}
         </Box>

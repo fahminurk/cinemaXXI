@@ -46,7 +46,7 @@ const userController = {
 
           const generateToken = nanoid();
           const token = await db.Token.create({
-            expired: moment().add(1, "hour").format(),
+            expired: moment().add(30, "minutes").format(),
             token: generateToken,
             payload: JSON.stringify(payload),
             status: "LOGIN",
@@ -225,7 +225,7 @@ const userController = {
       const { password } = req.body.user;
       const { id } = req.user;
 
-      const hashPassword = bcrypt.hash(password, 10);
+      const hashPassword = await bcrypt.hash(password, 10);
 
       await db.User.update(
         {
@@ -248,6 +248,9 @@ const userController = {
           },
         }
       );
+      return res.send({
+        message: "berhasil mengganti password",
+      });
     } catch (err) {
       res.status(500).send(err.message);
     }

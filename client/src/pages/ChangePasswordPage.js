@@ -12,70 +12,117 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { FaLock, FaPhone } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { api } from "../api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ChangePasswordPage() {
   //forget pass
+  const location = useLocation();
+  const [user, setUser] = useState([]);
+  const [token, setToken] = useState();
+  const dispatch = useDispatch();
+  const nav = useNavigate();
+
+  async function fetchUser(token) {
+    await api
+      .get("/users/v3", {
+        params: {
+          token,
+        },
+      })
+      .then((res) => setUser(res.data))
+      .catch((err) => console.log(err));
+  }
+
+  async function changePassword() {
+    await api
+      .patch("/users/forgotPassword?token=" + token, {
+        user,
+      })
+      .then((res) => {
+        alert(res.data.message);
+      });
+    nav("/login");
+  }
+
+  useEffect(() => {
+    const tempToken = location.pathname.split("/")[2];
+    fetchUser(tempToken);
+    setToken(tempToken);
+  }, []);
+
+  function inputHandler(e) {
+    const { id, value } = e.target;
+    const tempUser = { ...user };
+    tempUser[id] = value;
+    setUser(tempUser);
+  }
+
   return (
     <>
-      <Center flexDir={"column"} w="100vw" maxW="420px" paddingTop="20px">
-        <Center fontWeight={"bold"} padding="10px">
-          Change New Password
-        </Center>
-        <Stack spacing={4} w="100vw" maxW="420px" padding="15px">
-          <InputGroup h="34px">
-            <InputLeftAddon
-              bgColor="#eee"
-              padding={"6px 12px"}
-              color="#555"
-              border="1px solid #ccc"
-            >
-              <FaLock fontSize="16px" />
-            </InputLeftAddon>
-            <Input
-              padding={"6px 12px"}
-              type="password"
-              maxLength={"6"}
-              placeholder="6 digits Number"
-              border="1px solid #ccc"
-              w="100vw"
-              maxW="355px"
-              onChange={(e) => {
-                if (isNaN(e.target.value)) {
-                  e.target.value = "";
-                }
-              }}
-            />
-          </InputGroup>
-        </Stack>
+      {user.id ? (
+        <Center flexDir={"column"} w="100vw" maxW="420px" paddingTop="20px">
+          <Center fontWeight={"bold"} padding="10px">
+            Change New Password
+          </Center>
+          <Stack spacing={4} w="100vw" maxW="420px" padding="15px">
+            <InputGroup h="34px">
+              <InputLeftAddon
+                bgColor="#eee"
+                padding={"6px 12px"}
+                color="#555"
+                border="1px solid #ccc"
+              >
+                <FaLock fontSize="16px" />
+              </InputLeftAddon>
+              <Input
+                padding={"6px 12px"}
+                type="password"
+                maxLength={"6"}
+                placeholder="6 digits Number"
+                border="1px solid #ccc"
+                w="100vw"
+                maxW="355px"
+                id="password"
+                onChange={inputHandler}
+              />
+            </InputGroup>
+          </Stack>
 
-        <Flex
-          justifyContent={"space-between"}
-          w="100%"
-          padding="10px"
-          paddingBottom="20px"
-          flexDir={"column"}
-        >
-          <Center
+          <Flex
+            justifyContent={"space-between"}
             w="100%"
             padding="10px"
             paddingBottom="20px"
-            borderBottom={"1px solid #333"}
+            flexDir={"column"}
           >
-            <Button
-              color="white"
-              bgColor={"#006666"}
-              border="1px solid #005350"
-              padding="6px 12px"
+            <Center
+              w="100%"
+              padding="10px"
+              paddingBottom="20px"
+              borderBottom={"1px solid #333"}
             >
-              Change Password
-            </Button>
+              <Button
+                color="white"
+                bgColor={"#006666"}
+                border="1px solid #005350"
+                padding="6px 12px"
+                onClick={changePassword}
+              >
+                Change Password
+              </Button>
+            </Center>
+          </Flex>
+        </Center>
+      ) : (
+        <Center flexDir={"column"} w="100vw" maxW="420px">
+          <Center fontWeight={"bold"} h={"100vh"}>
+            Link has expired
           </Center>
-        </Flex>
-      </Center>
+        </Center>
+      )}
     </>
   );
 }

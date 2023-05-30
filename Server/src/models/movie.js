@@ -15,6 +15,9 @@ module.exports = (sequelize, Sequelize) => {
       distributor: { type: Sequelize.STRING },
       website: { type: Sequelize.STRING },
       image_url: { type: Sequelize.STRING },
+      status: {
+        type: Sequelize.ENUM("PLAYING", "UP-COMING"),
+      },
     },
     { paranoid: true }
   );

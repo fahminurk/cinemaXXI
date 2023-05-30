@@ -1,5 +1,7 @@
 import { Flex, Image, Box, Center } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { api } from "../api/api";
 
 export default function MovieCard(props) {
   return (
@@ -12,7 +14,12 @@ export default function MovieCard(props) {
       >
         <Center flexDir={"column"} w="100%">
           <Link to={`/movies/${props.id}`}>
-            <Image maxW="100%" src={props.image_url} cursor="pointer"></Image>
+            <Image
+              maxW="100%"
+              minH={"290px"}
+              src={props.image_url}
+              cursor="pointer"
+            ></Image>
           </Link>
           <Box h="50px" fontWeight={"600"} fontSize={"12px"} padding="5px">
             {props.title}
@@ -27,10 +34,10 @@ export default function MovieCard(props) {
           alignItems={"normal"}
         >
           <Box border="1px solid #EBEBEB" padding="5px 10px" h="30px">
-            2D
+            {props?.format}
           </Box>
           <Box border="1px solid #EBEBEB" padding="5px 10px" h="30px">
-            R13
+            {props?.rated}
           </Box>
         </Center>
       </Flex>

@@ -30,8 +30,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function EditProfile() {
   const userSelector = useSelector((state) => state.auth);
   const nav = useNavigate();
-  const dispatch = useDispatch();
   const toast = useToast();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({
     handphone: "",
     email: "",
@@ -49,6 +49,7 @@ export default function EditProfile() {
 
   //
   const editProfile = async () => {
+    let user2;
     if (!(user.handphone && user.email && user.name && user.address)) {
       toast({
         title: "fill in all data.",
@@ -58,10 +59,22 @@ export default function EditProfile() {
         isClosable: true,
       });
     } else {
-      await api.patch("/users/editProfile/" + userSelector.id, user);
-      alert("update berhasil");
-      return nav("/profile");
+      await api
+        .patch("/users/editProfile/" + userSelector.id, user)
+        // alert("update berhasil");
+        // return nav("/profile");
+        .then((res) => {
+          user2 = res.data;
+        });
     }
+    if (user2) {
+      await dispatch({
+        type: "login",
+        payload: user2,
+      });
+      alert("berhasil ganti profile");
+    }
+    return nav("/profile");
   };
 
   return (

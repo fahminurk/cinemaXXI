@@ -53,35 +53,22 @@ db.Token = require("./token")(sequelize, Sequelize);
 db.City = require("./city")(sequelize, Sequelize);
 db.Theater = require("./theater")(sequelize, Sequelize);
 db.Movie = require("./movie")(sequelize, Sequelize);
-// db.Schedule = require("./schedule")(sequelize, Sequelize);
-// db.Ticket = require("./ticket")(sequelize, Sequelize);
-// db.Order = require("./order")(sequelize, Sequelize);
-// db.OrderItem = require("./orderItem")(sequelize, Sequelize);
-db.ShowTIme = require("./showtime")(sequelize, Sequelize);
-db.Booking = require("./booking")(sequelize, Sequelize);
+db.Schedule = require("./schedule")(sequelize, Sequelize);
+db.Ticket = require("./ticket")(sequelize, Sequelize);
+db.Order = require("./order")(sequelize, Sequelize);
+db.OrderItem = require("./orderItem")(sequelize, Sequelize);
 
 db.Theater.belongsTo(db.City, {
   foreignKey: "city_id",
 });
-// db.Schedule.belongsTo(db.Theater, {
-//   foreignKey: "theater_id",
-// });
-// db.Schedule.belongsTo(db.Movie, {
-//   foreignKey: "movie_id",
-// });
-// db.OrderItem.belongsTo(db.Schedule, {
-//   foreignKey: "schedule_id",
-// });
-db.ShowTIme.belongsTo(db.Movie, {
-  foreignKey: "movie_id",
-});
-db.ShowTIme.belongsTo(db.Theater, {
+db.Schedule.belongsTo(db.Theater, {
   foreignKey: "theater_id",
 });
-db.Booking.belongsTo(db.User, {
-  foreignKey: "user_id",
+db.Schedule.belongsTo(db.Movie, {
+  foreignKey: "movie_id",
 });
-db.Booking.belongsTo(db.ShowTIme, {
-  foreignKey: "showtime_id",
+db.OrderItem.belongsTo(db.Schedule, {
+  foreignKey: "schedule_id",
 });
+
 module.exports = db;

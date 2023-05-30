@@ -18,9 +18,11 @@ export default function ProtectedPage({
 
   useEffect(() => {
     if (guestOnly && userSelector?.handphone) {
-      return nav("/home");
+      // jika guestonly false dan user phone ada
+      return nav("/home"); // maka go home
     } else if (needLogin && !userSelector?.handphone) {
-      return nav("/login");
+      //jika needlogin false dan ga ada user phone gaada
+      return nav("/login"); //maka go login
     }
   }, [userSelector, needLogin]);
 

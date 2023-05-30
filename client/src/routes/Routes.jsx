@@ -15,6 +15,7 @@ import TransactionPage from "../pages/TransactionPage";
 import UpComingPage from "../pages/UpComingPage";
 import ProtectedPage from "./ProtectedPage";
 import { Route } from "react-router-dom";
+import TheaterPage from "../pages/ListTheaterPage";
 
 const routes = [
   <Route
@@ -109,6 +110,15 @@ const routes = [
     }
   />,
   <Route
+    path="/list-theater"
+    key={"theater"}
+    element={
+      <ProtectedPage guestOnly={true}>
+        <TheaterPage />
+      </ProtectedPage>
+    }
+  />,
+  <Route
     path="/upcoming"
     key={"upcoming"}
     element={
@@ -134,6 +144,7 @@ const routes = [
     element={
       <ProtectedPage guestOnly={true}>
         <ChangePasswordPage />
+        //{" "}
       </ProtectedPage>
     }
   />,
